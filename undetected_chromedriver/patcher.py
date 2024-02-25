@@ -7,7 +7,6 @@ import json
 import logging
 import os
 import pathlib
-import platform
 import random
 import re
 import shutil
@@ -212,7 +211,7 @@ class Patcher(object):
                     return True
                 return False
             # ok safe to assume this is in use
-        except Exception as e:
+        except Exception:
             # logger.exception("whoops ", e)
             pass
 
@@ -222,7 +221,7 @@ class Patcher(object):
         for item in items:
             try:
                 item.unlink()
-            except:
+            except Exception:
                 pass
 
     def patch(self):
@@ -260,7 +259,9 @@ class Patcher(object):
             response = conn.read().decode()
 
         major_versions = json.loads(response)
-        return LooseVersion(major_versions["milestones"][str(self.version_main)]["version"])
+        return LooseVersion(
+            major_versions["milestones"][str(self.version_main)]["version"]
+        )
 
     def parse_exe_version(self):
         with io.open(self.executable_path, "rb") as f:
@@ -277,10 +278,16 @@ class Patcher(object):
         """
         zip_name = f"chromedriver_{self.platform_name}.zip"
         if self.is_old_chromedriver:
-            download_url = "%s/%s/%s" % (self.url_repo, self.version_full.vstring, zip_name)
+            download_url = "%s/%s/%s" % (
+                self.url_repo,
+                self.version_full.vstring,
+                zip_name,
+            )
         else:
             zip_name = zip_name.replace("_", "-", 1)
-            download_url = "https://storage.googleapis.com/chrome-for-testing-public/%s/%s/%s"
+            download_url = (
+                "https://storage.googleapis.com/chrome-for-testing-public/%s/%s/%s"
+            )
             download_url %= (self.version_full.vstring, self.platform_name, zip_name)
 
         logger.debug("downloading from %s" % download_url)
