@@ -1,14 +1,18 @@
 import time
 import logging
-logging.basicConfig(level=10)
 
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.webdriver import By
 import selenium.webdriver.support.expected_conditions as EC  # noqa
 from selenium.webdriver.support.wait import WebDriverWait
 
-
 import undetected_chromedriver as uc
+
+logging.basicConfig(level=10)
+
+
+def sleep_dummy(n):
+    print("we could be sleeping %d seconds here, but we don't" % n)
 
 
 def main(args=None):
@@ -22,9 +26,7 @@ def main(args=None):
     if TAKE_IT_EASY:
         sleep = time.sleep
     else:
-        sleep = lambda n: print(
-            "we could be sleeping %d seconds here, but we don't" % n
-        )
+        sleep = sleep_dummy
 
     driver = uc.Chrome()
     driver.get("https://www.google.com")
@@ -52,9 +54,7 @@ def main(args=None):
         el.textContent = "Excluded from support...!";
         container.insertAdjacentElement('afterBegin', el);
         setTimeout(() => {
-            el.textContent = "<<<  OH , CHECK YOUR CONSOLE! >>>"}, 2500)
-        
-    """
+            el.textContent = "<<<  OH , CHECK YOUR CONSOLE! >>>"}, 2500)"""
     )
 
     sleep(2)  # never use this. this is for demonstration purposes only
@@ -167,7 +167,6 @@ def main(args=None):
     print("lets go to UC project page")
     driver.get("https://www.github.com/ultrafunkamsterdam/undetected-chromedriver")
 
-    
     sleep(2)
     driver.quit()
 

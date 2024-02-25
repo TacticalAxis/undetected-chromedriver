@@ -7,6 +7,7 @@ import logging
 import requests
 import websockets
 
+from undetected_chromedriver.options import ChromeOptions
 
 log = logging.getLogger(__name__)
 

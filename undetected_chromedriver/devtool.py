@@ -89,7 +89,7 @@ def timeout(seconds=3, on_timeout: Optional[Callable[[callable], Any]] = None):
             t.start()
             try:
                 return func(*args, **kwargs)
-            except:
+            except Exception:
                 t.cancel()
                 raise
             finally:
@@ -101,7 +101,8 @@ def timeout(seconds=3, on_timeout: Optional[Callable[[callable], Any]] = None):
 
 
 def test():
-    import sys, os
+    import sys
+    import os
 
     sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
     import undetected_chromedriver as uc
@@ -135,13 +136,13 @@ def test():
                         for _ in listen_events:
                             try:
                                 log_lines += await get_log_lines(_)
-                            except:
+                            except Exception:
                                 if logging.getLogger().getEffectiveLevel() <= 10:
                                     traceback.print_exc()
                                 continue
                         if log_lines and on_event_coro:
                             await on_event_coro(log_lines)
-                    except Exception as e:
+                    except Exception:
                         if logging.getLogger().getEffectiveLevel() <= 10:
                             traceback.print_exc()
 
