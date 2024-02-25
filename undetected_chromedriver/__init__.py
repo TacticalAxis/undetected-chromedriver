@@ -840,10 +840,7 @@ class Chrome(selenium.webdriver.chrome.webdriver.WebDriver):
             self.service.process.kill()
         except:  # noqa
             pass
-        try:
-            self.quit()
-        except OSError:
-            pass
+        self.quit()
 
     @classmethod
     def _ensure_close(cls, self):
